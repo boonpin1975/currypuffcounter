@@ -1,11 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  experimental: {
-    serverActions: {
-      allowedOrigins: ['currypuffcounter.natkitchen.shop', 'localhost:6000', '127.0.0.1:6000'],
-    },
-  },
   async headers() {
     return [
       {

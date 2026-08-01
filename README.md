@@ -41,7 +41,6 @@
 
 - ⚡ **Production Server Configured**:
   - Custom HTTP server (`server.js`) listening on **Port 6000**.
-  - Configured CORS headers and allowed origins for `currypuffcounter.natkitchen.shop`.
 
 ---
 
@@ -94,52 +93,7 @@ currypuffcounter/
 ├── server.js                 # Custom HTTP server on port 6000
 ├── package.json              # Project configuration & npm scripts
 ├── tailwind.config.js        # Theme tokens
-└── next.config.js            # Next.js domain & header options
-```
-
----
-
-## 🗄️ Database Schema (Prisma)
-
-```prisma
-model User {
-  id            String     @id @default(uuid())
-  email         String     @unique
-  password_hash String
-  created_at    DateTime   @default(now())
-
-  vendors       Vendor[]
-  deliveries    Delivery[]
-}
-
-model Vendor {
-  id            String     @id @default(uuid())
-  name          String
-  default_price Float      @default(1.50) // Unit price in RM
-  user_id       String
-  user          User       @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  created_at    DateTime   @default(now())
-
-  deliveries    Delivery[]
-
-  @@index([user_id])
-}
-
-model Delivery {
-  id         String   @id @default(uuid())
-  quantity   Int
-  unit_price Float    @default(1.50) // Unit price in RM
-  date       DateTime @default(now())
-  vendor_id  String
-  vendor     Vendor   @relation(fields: [vendor_id], references: [id], onDelete: Cascade)
-  user_id    String
-  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  created_at DateTime @default(now())
-
-  @@index([user_id])
-  @@index([vendor_id])
-  @@index([date])
-}
+└── next.config.js            # Next.js server options
 ```
 
 ---
@@ -184,7 +138,7 @@ npm run build
 npm start
 ```
 
-Access the app in your browser at `http://localhost:6000` or `https://currypuffcounter.natkitchen.shop`.
+Access the app in your browser at `http://localhost:6000`.
 
 ---
 

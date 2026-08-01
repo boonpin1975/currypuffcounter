@@ -11,7 +11,6 @@ const handle = app.getRequestHandler();
 app.prepare().then(() => {
   createServer(async (req, res) => {
     try {
-      // Set CORS headers for currypuffcounter.natkitchen.shop
       res.setHeader('Access-Control-Allow-Origin', '*');
       res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
       res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
@@ -32,6 +31,5 @@ app.prepare().then(() => {
   }).listen(port, (err) => {
     if (err) throw err;
     console.log(`> Curry Puff Counter Server running on port ${port}`);
-    console.log(`> Domain configured: https://currypuffcounter.natkitchen.shop`);
   });
 });
