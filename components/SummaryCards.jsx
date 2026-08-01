@@ -29,7 +29,7 @@ export default function SummaryCards({ stats, loading }) {
       badgeBg: 'bg-orange-500/20 text-orange-300 border-orange-500/30',
     },
     {
-      title: 'Total Active Deliveries',
+      title: 'Active Period Delivery',
       value: stats?.totalDeliveredActive ?? stats?.totalDeliveredThisWeek ?? 0,
       unit: 'puffs',
       subValue: `RM ${(stats?.totalRevenueActiveRM ?? stats?.totalRevenueThisWeekRM ?? 0).toFixed(2)}`,

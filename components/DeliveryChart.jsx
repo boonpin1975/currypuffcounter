@@ -51,7 +51,7 @@ export default function DeliveryChart({ data, loading }) {
           </div>
           <div>
             <h3 className="font-bold text-gray-100 text-base">
-              Active Delivery Volume
+              Active Period Delivery Volume
             </h3>
             <p className="text-xs text-gray-400">
               Total curry puffs delivered per day across active delivery period
