@@ -5,7 +5,26 @@ import { PlusCircle, Calendar, Store, CheckCircle, AlertCircle, Sparkles, Dollar
 import Link from 'next/link';
 
 export default function QuickCounterForm({ vendors, onDeliveryLogged }) {
-  const todayStr = new Date().toISOString().split('T')[0];
+  const getTodayStr = () => {
+    const d = new Date();
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
+  const getTodayFormatted = () => {
+    const d = new Date();
+    return d.toLocaleDateString('en-US', {
+      weekday: 'short',
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    });
+  };
+
+  const todayStr = getTodayStr();
+  const todayFormatted = getTodayFormatted();
   
   const [vendorId, setVendorId] = useState(vendors?.[0]?.id || '');
   const [quantity, setQuantity] = useState(10);
@@ -66,7 +85,7 @@ export default function QuickCounterForm({ vendors, onDeliveryLogged }) {
           vendor_id: vendorId,
           quantity: parsedQty,
           unit_price: parsedPrice,
-          date: date ? new Date(date).toISOString() : new Date().toISOString(),
+          date: date ? new Date(`${date}T12:00:00`).toISOString() : new Date().toISOString(),
         }),
       });
 
@@ -107,11 +126,13 @@ export default function QuickCounterForm({ vendors, onDeliveryLogged }) {
           </div>
           <div>
             <h3 className="font-extrabold text-gray-100 text-base sm:text-lg">Delivery Counter</h3>
-            <p className="text-[11px] text-amber-200/70">Select vendor to auto-load custom RM unit rate</p>
+            <p className="text-[11px] text-amber-200/70">
+              Today: <span className="font-extrabold text-amber-400">{todayFormatted}</span>
+            </p>
           </div>
         </div>
         <span className="text-[10px] bg-amber-500/20 text-amber-300 px-2.5 py-1 rounded-full border border-amber-500/30 flex items-center gap-1 font-bold">
-          <Sparkles className="w-3 h-3 text-amber-400" /> Mobile Counter
+          <Calendar className="w-3 h-3 text-amber-400" /> {todayStr}
         </span>
       </div>
 

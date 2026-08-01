@@ -14,60 +14,73 @@ export async function GET(req) {
 
     const now = new Date();
     const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    const sevenDaysAgo = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 6);
+
+    const toLocalDateKey = (d) => {
+      const date = new Date(d);
+      return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+    };
+
+    const todayKey = toLocalDateKey(now);
 
     const totalVendorsActive = await prisma.vendor.count({
       where: { user_id: user.id }
     });
 
-    const recentDeliveries = await prisma.delivery.findMany({
+    const allDeliveries = await prisma.delivery.findMany({
       where: {
         user_id: user.id,
-        date: {
-          gte: sevenDaysAgo
-        }
       },
       select: {
         quantity: true,
         unit_price: true,
         date: true
+      },
+      orderBy: {
+        date: 'asc'
       }
     });
 
     let totalDeliveredToday = 0;
-    let totalDeliveredThisWeek = 0;
+    let totalDeliveredActive = 0;
     let totalRevenueTodayRM = 0;
-    let totalRevenueThisWeekRM = 0;
+    let totalRevenueActiveRM = 0;
 
-    recentDeliveries.forEach(d => {
-      const dDate = new Date(d.date);
+    allDeliveries.forEach(d => {
       const price = d.unit_price || 1.50;
       const revenue = d.quantity * price;
+      const dKey = toLocalDateKey(d.date);
 
-      totalDeliveredThisWeek += d.quantity;
-      totalRevenueThisWeekRM += revenue;
+      totalDeliveredActive += d.quantity;
+      totalRevenueActiveRM += revenue;
 
-      if (dDate >= todayStart) {
+      if (dKey === todayKey) {
         totalDeliveredToday += d.quantity;
         totalRevenueTodayRM += revenue;
       }
     });
 
+    // Determine active date range for the chart (default at least past 14 days up to today)
+    let startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 13);
+    if (allDeliveries.length > 0) {
+      const earliestDate = new Date(allDeliveries[0].date);
+      const earliestStart = new Date(earliestDate.getFullYear(), earliestDate.getMonth(), earliestDate.getDate());
+      if (earliestStart < startDate) {
+        startDate = earliestStart;
+      }
+    }
+
     const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     const chartData = [];
 
-    for (let i = 6; i >= 0; i--) {
-      const dayDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() - i);
-      const dateKey = `${dayDate.getFullYear()}-${String(dayDate.getMonth() + 1).padStart(2, '0')}-${String(dayDate.getDate()).padStart(2, '0')}`;
-      const dayLabel = `${dayNames[dayDate.getDay()]} ${dayDate.getDate()}`;
+    for (let d = new Date(startDate); d <= todayStart; d.setDate(d.getDate() + 1)) {
+      const dateKey = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+      const dayLabel = `${dayNames[d.getDay()]} ${d.getDate()}`;
 
       let dayTotalCount = 0;
       let dayTotalRevenue = 0;
 
-      recentDeliveries.forEach(item => {
-        const itemDate = new Date(item.date);
-        const itemDateKey = `${itemDate.getFullYear()}-${String(itemDate.getMonth() + 1).padStart(2, '0')}-${String(itemDate.getDate()).padStart(2, '0')}`;
-        if (itemDateKey === dateKey) {
+      allDeliveries.forEach(item => {
+        if (toLocalDateKey(item.date) === dateKey) {
           dayTotalCount += item.quantity;
           dayTotalRevenue += item.quantity * (item.unit_price || 1.50);
         }
@@ -85,9 +98,11 @@ export async function GET(req) {
       stats: {
         totalDeliveredToday,
         totalVendorsActive,
-        totalDeliveredThisWeek,
+        totalDeliveredThisWeek: totalDeliveredActive,
+        totalDeliveredActive,
         totalRevenueTodayRM: parseFloat(totalRevenueTodayRM.toFixed(2)),
-        totalRevenueThisWeekRM: parseFloat(totalRevenueThisWeekRM.toFixed(2)),
+        totalRevenueThisWeekRM: parseFloat(totalRevenueActiveRM.toFixed(2)),
+        totalRevenueActiveRM: parseFloat(totalRevenueActiveRM.toFixed(2)),
         chartData
       }
     });
@@ -100,3 +115,4 @@ export async function GET(req) {
     );
   }
 }
+
