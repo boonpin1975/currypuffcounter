@@ -12,15 +12,18 @@ export async function GET(req) {
       return NextResponse.json({ error: 'Unauthenticated' }, { status: 401 });
     }
 
-    const now = new Date();
-    const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const { searchParams } = new URL(req.url);
+    const clientToday = searchParams.get('today');
 
     const toLocalDateKey = (d) => {
       const date = new Date(d);
       return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
     };
 
-    const todayKey = toLocalDateKey(now);
+    const serverNow = new Date();
+    const todayKey = (clientToday && /^\d{4}-\d{2}-\d{2}$/.test(clientToday))
+      ? clientToday
+      : toLocalDateKey(serverNow);
 
     const totalVendorsActive = await prisma.vendor.count({
       where: { user_id: user.id }
@@ -45,6 +48,8 @@ export async function GET(req) {
     let totalRevenueTodayRM = 0;
     let totalRevenueActiveRM = 0;
 
+    let latestDeliveryKey = todayKey;
+
     allDeliveries.forEach(d => {
       const price = d.unit_price || 1.50;
       const revenue = d.quantity * price;
@@ -57,24 +62,38 @@ export async function GET(req) {
         totalDeliveredToday += d.quantity;
         totalRevenueTodayRM += revenue;
       }
+
+      if (dKey > latestDeliveryKey) {
+        latestDeliveryKey = dKey;
+      }
     });
 
-    // Determine active date range for the chart (default at least past 14 days up to today)
-    let startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 13);
+    // Chart bounds: endDate is max of todayKey and latest delivery key
+    const endDateKey = latestDeliveryKey;
+
+    const parseDateKey = (keyStr) => {
+      const [y, m, d] = keyStr.split('-').map(Number);
+      return new Date(y, m - 1, d);
+    };
+
+    const endObj = parseDateKey(endDateKey);
+
+    // Default start date is at least 13 days before endDate
+    let startObj = new Date(endObj.getFullYear(), endObj.getMonth(), endObj.getDate() - 13);
     if (allDeliveries.length > 0) {
-      const earliestDate = new Date(allDeliveries[0].date);
-      const earliestStart = new Date(earliestDate.getFullYear(), earliestDate.getMonth(), earliestDate.getDate());
-      if (earliestStart < startDate) {
-        startDate = earliestStart;
+      const earliestKey = toLocalDateKey(allDeliveries[0].date);
+      const earliestObj = parseDateKey(earliestKey);
+      if (earliestObj < startObj) {
+        startObj = earliestObj;
       }
     }
 
     const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     const chartData = [];
 
-    for (let d = new Date(startDate); d <= todayStart; d.setDate(d.getDate() + 1)) {
-      const dateKey = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-      const dayLabel = `${dayNames[d.getDay()]} ${d.getDate()}`;
+    for (let curr = new Date(startObj); curr <= endObj; curr.setDate(curr.getDate() + 1)) {
+      const dateKey = toLocalDateKey(curr);
+      const dayLabel = `${dayNames[curr.getDay()]} ${curr.getDate()}`;
 
       let dayTotalCount = 0;
       let dayTotalRevenue = 0;
@@ -115,4 +134,5 @@ export async function GET(req) {
     );
   }
 }
+
 
