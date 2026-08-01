@@ -1,0 +1,25 @@
+[Unit]
+Description=Curry Puff Counter Web Application Service
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/var/www/currypuffcounter
+ExecStart=/usr/bin/node server.js
+Restart=always
+RestartSec=5
+
+# Environment variables
+Environment=NODE_ENV=production
+Environment=PORT=6000
+Environment=JWT_SECRET=curry-puff-secret-key-super-secure-2026
+Environment=DATABASE_URL="file:./dev.db"
+
+# Output logs to syslog / journalctl
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=currypuffcounter
+
+[Install]
+WantedBy=multi-user.target

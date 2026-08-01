@@ -44,18 +44,51 @@
 
 ---
 
-## 🛠️ Tech Stack
+## 🛠️ Systemd Linux Service Setup (`systemctl`)
 
-| Layer | Technology |
-| :--- | :--- |
-| **Framework** | Next.js 14 (App Router) |
-| **UI Library** | React 18 |
-| **Styling** | Tailwind CSS with warm golden-amber theme tokens |
-| **Database** | SQLite (`dev.db`) |
-| **ORM** | Prisma ORM |
-| **Visualization** | Recharts 2.x |
-| **Icons** | Lucide React |
-| **Auth** | JWT (`jsonwebtoken`) & `bcryptjs` |
+### 1. Automatic One-Line Systemd Installer
+Run the included installer script with `sudo` to automatically configure, enable, and start the systemd service on Linux:
+
+```bash
+chmod +x ./scripts/setup-systemd.sh
+sudo ./scripts/setup-systemd.sh install
+```
+
+### 2. Manual Systemd Configuration
+You can also manually copy `currypuffcounter.service` into `/etc/systemd/system/`:
+
+```bash
+# 1. Copy service configuration file
+sudo cp currypuffcounter.service /etc/systemd/system/
+
+# 2. Reload systemd daemon
+sudo systemctl daemon-reload
+
+# 3. Enable service on system boot
+sudo systemctl enable currypuffcounter
+
+# 4. Start the service
+sudo systemctl start currypuffcounter
+```
+
+### 3. Service Management Commands
+
+```bash
+# Check service status
+sudo systemctl status currypuffcounter
+
+# Start service
+sudo systemctl start currypuffcounter
+
+# Stop service
+sudo systemctl stop currypuffcounter
+
+# Restart service
+sudo systemctl restart currypuffcounter
+
+# View live application logs
+sudo journalctl -u currypuffcounter -f
+```
 
 ---
 
@@ -84,12 +117,15 @@ currypuffcounter/
 │   ├── QuickCounterForm.jsx  # Mobile-friendly delivery counter
 │   ├── VendorList.jsx        # Vendor management list
 │   └── RecentDeliveriesTable.jsx # Delivery logs history table
+├── scripts/
+│   └── setup-systemd.sh      # Automated Linux systemd installer script
 ├── prisma/
 │   ├── schema.prisma         # Prisma schema (User, Vendor, Delivery models)
 │   ├── seed.js               # Clean database seed configuration
 │   └── clean.js              # Database cleanup script
 ├── public/
 │   └── logo.png              # Handmade Curry Puff mascot logo
+├── currypuffcounter.service  # Linux systemd service unit file
 ├── server.js                 # Custom HTTP server on port 6000
 ├── package.json              # Project configuration & npm scripts
 ├── tailwind.config.js        # Theme tokens
@@ -139,24 +175,6 @@ npm start
 ```
 
 Access the app in your browser at `http://localhost:6000`.
-
----
-
-## ⚙️ PM2 Process Management (Optional)
-
-To keep the application running continuously in production with PM2:
-
-```bash
-# Install PM2 globally
-npm install -g pm2
-
-# Start process with PM2
-pm2 start server.js --name "currypuffcounter"
-
-# Save PM2 process list
-pm2 save
-pm2 startup
-```
 
 ---
 
