@@ -24,6 +24,12 @@ export default function VendorList({ vendors, onVendorUpdated }) {
       return;
     }
 
+    const price = parseFloat(newDefaultPrice);
+    if (isNaN(price) || price <= 0) {
+      setError('Please enter a valid rate (RM) greater than 0');
+      return;
+    }
+
     setLoading(true);
     try {
       const res = await fetch('/api/vendors', {
@@ -31,7 +37,7 @@ export default function VendorList({ vendors, onVendorUpdated }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name: newVendorName,
-          default_price: parseFloat(newDefaultPrice) || 1.50
+          default_price: price,
         }),
       });
 
@@ -40,7 +46,7 @@ export default function VendorList({ vendors, onVendorUpdated }) {
 
       setNewVendorName('');
       setNewDefaultPrice(1.50);
-      setSuccess(`Vendor "${data.vendor.name}" added successfully with default unit price RM ${(data.vendor.default_price || 1.50).toFixed(2)}!`);
+      setSuccess(`Vendor "${data.vendor.name}" added with default rate RM ${(data.vendor.default_price || 1.50).toFixed(2)}!`);
       if (onVendorUpdated) onVendorUpdated();
 
       setTimeout(() => setSuccess(''), 3000);
@@ -66,13 +72,19 @@ export default function VendorList({ vendors, onVendorUpdated }) {
       return;
     }
 
+    const price = parseFloat(editingPrice);
+    if (isNaN(price) || price <= 0) {
+      setError('Please enter a valid rate (RM) greater than 0');
+      return;
+    }
+
     try {
       const res = await fetch(`/api/vendors/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name: editingName,
-          default_price: parseFloat(editingPrice) || 1.50
+          default_price: price,
         }),
       });
 
@@ -117,7 +129,7 @@ export default function VendorList({ vendors, onVendorUpdated }) {
           <span>Add New Vendor Location</span>
         </h3>
         <p className="text-xs text-gray-400 mb-4">
-          Create a vendor account with default unit price (RM) to begin logging curry puff deliveries.
+          Create a vendor account with default unit rate (RM) to begin logging curry puff deliveries.
         </p>
 
         {error && (
@@ -148,9 +160,9 @@ export default function VendorList({ vendors, onVendorUpdated }) {
               <span className="absolute left-3 top-2.5 text-xs text-emerald-400 font-bold">RM</span>
               <input
                 type="number"
-                step="0.05"
-                min="0.1"
-                placeholder="Unit Price"
+                step="any"
+                min="0.01"
+                placeholder="Unit Rate"
                 value={newDefaultPrice}
                 onChange={(e) => setNewDefaultPrice(e.target.value)}
                 className="w-full bg-curry-dark border border-amber-900/50 rounded-xl pl-9 pr-3 py-2.5 text-sm font-semibold text-emerald-400 focus:outline-none focus:border-amber-500 transition-colors"
@@ -211,7 +223,8 @@ export default function VendorList({ vendors, onVendorUpdated }) {
                           <span className="absolute left-2 top-1 text-xs text-emerald-400 font-bold">RM</span>
                           <input
                             type="number"
-                            step="0.05"
+                            step="any"
+                            min="0.01"
                             value={editingPrice}
                             onChange={(e) => setEditingPrice(e.target.value)}
                             className="bg-curry-dark border border-amber-500 rounded-lg pl-7 pr-2 py-0.5 text-xs text-emerald-400 focus:outline-none w-full font-bold"

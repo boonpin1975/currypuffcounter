@@ -33,19 +33,26 @@ export default function QuickCounterForm({ vendors, onDeliveryLogged }) {
     setQuantity((prev) => Math.max(1, (parseInt(prev) || 0) + amount));
   };
 
-  const calculatedSubtotal = ((parseInt(quantity) || 0) * (parseFloat(unitPrice) || 0)).toFixed(2);
+  const parsedQty = parseInt(quantity) || 0;
+  const parsedPrice = parseFloat(unitPrice) || 0;
+  const calculatedSubtotal = (parsedQty * parsedPrice).toFixed(2);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setFeedback(null);
 
     if (!vendorId) {
-      setFeedback({ type: 'error', message: 'Please select a vendor first.' });
+      setFeedback({ type: 'error', message: 'Please select a vendor.' });
       return;
     }
 
-    if (!quantity || parseInt(quantity) <= 0) {
+    if (!parsedQty || parsedQty <= 0) {
       setFeedback({ type: 'error', message: 'Please enter a valid quantity greater than 0.' });
+      return;
+    }
+
+    if (isNaN(parsedPrice) || parsedPrice <= 0) {
+      setFeedback({ type: 'error', message: 'Please enter a valid unit rate (RM) greater than 0.' });
       return;
     }
 
@@ -57,8 +64,8 @@ export default function QuickCounterForm({ vendors, onDeliveryLogged }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           vendor_id: vendorId,
-          quantity: parseInt(quantity),
-          unit_price: parseFloat(unitPrice) || 1.50,
+          quantity: parsedQty,
+          unit_price: parsedPrice,
           date: date ? new Date(date).toISOString() : new Date().toISOString(),
         }),
       });
@@ -71,7 +78,7 @@ export default function QuickCounterForm({ vendors, onDeliveryLogged }) {
 
       setFeedback({
         type: 'success',
-        message: data.message || `Logged ${quantity} curry puffs delivered!`,
+        message: data.message || `Logged ${parsedQty} curry puffs delivered!`,
       });
 
       if (onDeliveryLogged) {
@@ -92,7 +99,7 @@ export default function QuickCounterForm({ vendors, onDeliveryLogged }) {
   return (
     <div className="glass-panel rounded-2xl p-4 sm:p-6 border border-amber-500/40 relative shadow-2xl">
       
-      {/* Mobile-friendly Header */}
+      {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2.5">
           <div className="p-2 rounded-xl bg-amber-500/20 text-amber-400">
@@ -100,7 +107,7 @@ export default function QuickCounterForm({ vendors, onDeliveryLogged }) {
           </div>
           <div>
             <h3 className="font-extrabold text-gray-100 text-base sm:text-lg">Delivery Counter</h3>
-            <p className="text-[11px] text-amber-200/70">Tap & log curry puff shipments instantly</p>
+            <p className="text-[11px] text-amber-200/70">Select vendor to auto-load custom RM unit rate</p>
           </div>
         </div>
         <span className="text-[10px] bg-amber-500/20 text-amber-300 px-2.5 py-1 rounded-full border border-amber-500/30 flex items-center gap-1 font-bold">
@@ -148,7 +155,7 @@ export default function QuickCounterForm({ vendors, onDeliveryLogged }) {
                 <span>Select Vendor</span>
               </span>
               <Link href="/vendors" className="text-[11px] text-amber-400 underline">
-                + Manage
+                + Manage Vendors
               </Link>
             </label>
             <select
@@ -159,7 +166,7 @@ export default function QuickCounterForm({ vendors, onDeliveryLogged }) {
             >
               {vendors.map((v) => (
                 <option key={v.id} value={v.id}>
-                  {v.name} (RM {(v.default_price || 1.50).toFixed(2)})
+                  {v.name} (RM {(v.default_price || 1.50).toFixed(2)} / puff)
                 </option>
               ))}
             </select>
@@ -175,13 +182,14 @@ export default function QuickCounterForm({ vendors, onDeliveryLogged }) {
               inputMode="numeric"
               pattern="[0-9]*"
               min="1"
+              step="1"
               value={quantity}
               onChange={(e) => setQuantity(e.target.value)}
               className="w-full bg-curry-dark border border-amber-500/40 rounded-xl px-4 py-3 text-2xl font-black text-amber-400 focus:outline-none focus:border-amber-400 min-h-[52px] mb-2 text-center tracking-wide"
               required
             />
             
-            {/* Large Mobile Quick Add Presets */}
+            {/* Presets */}
             <div className="grid grid-cols-4 gap-2">
               {[5, 10, 25, 50].map((amt) => (
                 <button
@@ -201,14 +209,14 @@ export default function QuickCounterForm({ vendors, onDeliveryLogged }) {
             <div>
               <label className="block text-[11px] font-bold text-gray-300 mb-1 flex items-center gap-1">
                 <Tag className="w-3 h-3 text-emerald-400" />
-                <span>Rate (RM)</span>
+                <span>Unit Rate (RM)</span>
               </label>
               <div className="relative">
                 <span className="absolute left-2.5 top-2.5 text-xs text-emerald-400 font-extrabold">RM</span>
                 <input
                   type="number"
                   inputMode="decimal"
-                  step="0.05"
+                  step="any"
                   min="0.01"
                   value={unitPrice}
                   onChange={(e) => setUnitPrice(e.target.value)}
@@ -244,7 +252,7 @@ export default function QuickCounterForm({ vendors, onDeliveryLogged }) {
             />
           </div>
 
-          {/* Big Record Delivery Button */}
+          {/* Record Delivery Button */}
           <button
             type="submit"
             disabled={loading}
