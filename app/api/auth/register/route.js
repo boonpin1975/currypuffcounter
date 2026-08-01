@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
-import { hashPassword, signToken, TOKEN_NAME } from '@/lib/auth';
+import { hashPassword } from '@/lib/auth';
 
 export async function POST(req) {
   try {
@@ -13,6 +13,8 @@ export async function POST(req) {
       );
     }
 
+    const cleanEmail = String(email).toLowerCase().trim();
+
     if (password.length < 6) {
       return NextResponse.json(
         { error: 'Password must be at least 6 characters long' },
@@ -22,12 +24,12 @@ export async function POST(req) {
 
     // Check if user already exists
     const existingUser = await prisma.user.findUnique({
-      where: { email: email.toLowerCase().trim() },
+      where: { email: cleanEmail },
     });
 
     if (existingUser) {
       return NextResponse.json(
-        { error: 'User with this email already exists' },
+        { error: 'An account with this email already exists' },
         { status: 400 }
       );
     }
@@ -36,7 +38,7 @@ export async function POST(req) {
     const password_hash = await hashPassword(password);
     const user = await prisma.user.create({
       data: {
-        email: email.toLowerCase().trim(),
+        email: cleanEmail,
         password_hash,
       },
       select: {
@@ -46,35 +48,24 @@ export async function POST(req) {
       },
     });
 
-    // Create default sample vendor so user has immediate vendor options
+    // Create default starter vendor for new user
     await prisma.vendor.create({
       data: {
         name: "Main Cafe Vendor",
+        default_price: 1.50,
         user_id: user.id
       }
     });
 
-    // Sign token & set cookie
-    const token = signToken(user);
-    const response = NextResponse.json({
-      message: 'Account created successfully',
+    return NextResponse.json({
+      message: 'Account created successfully! Please sign in.',
       user,
-    });
+    }, { status: 201 });
 
-    response.cookies.set({
-      name: TOKEN_NAME,
-      value: token,
-      httpOnly: true,
-      path: '/',
-      secure: process.env.NODE_ENV === 'production',
-      maxAge: 7 * 24 * 60 * 60, // 7 days
-    });
-
-    return response;
   } catch (error) {
-    console.error('Registration error:', error);
+    console.error('Registration API error:', error);
     return NextResponse.json(
-      { error: 'An unexpected error occurred during registration' },
+      { error: error?.message || 'An error occurred during registration. Please try again.' },
       { status: 500 }
     );
   }
