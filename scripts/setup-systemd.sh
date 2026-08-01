@@ -7,17 +7,19 @@ SERVICE_NAME="currypuffcounter"
 SERVICE_FILE="/etc/systemd/system/${SERVICE_NAME}.service"
 APP_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 NODE_PATH="$(which node || echo "/usr/bin/node")"
+NPM_PATH="$(which npm || echo "/usr/bin/npm")"
 
 # Color formatting
-GREEN='\030[0;32m'
+GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 RED='\033[0;31m'
 NC='\033[0m' # No Color
 
 function show_usage() {
-    echo -e "${YELLOW}Usage:${NC} sudo ./scripts/setup-systemd.sh [install | start | stop | restart | status | logs]"
+    echo -e "${YELLOW}Usage:${NC} sudo ./scripts/setup-systemd.sh [install | build | start | stop | restart | status | logs]"
     echo ""
-    echo "  install  : Installs the systemd service file to /etc/systemd/system/"
+    echo "  install  : Builds the project & installs systemd service to /etc/systemd/system/"
+    echo "  build    : Pushes Prisma schema and builds Next.js production bundle"
     echo "  start    : Starts the currypuffcounter systemd service"
     echo "  stop     : Stops the service"
     echo "  restart  : Restarts the service"
@@ -31,6 +33,13 @@ if [ -z "$1" ]; then
 fi
 
 case "$1" in
+    build)
+        echo -e "${GREEN}==> Building production bundle...${NC}"
+        cd "${APP_DIR}"
+        npx prisma db push
+        npm run build
+        ;;
+
     install)
         echo -e "${GREEN}==> Installing Curry Puff Counter systemd service...${NC}"
         
@@ -40,7 +49,16 @@ case "$1" in
             exit 1
         fi
 
-        # Generate service file dynamically with current paths
+        cd "${APP_DIR}"
+
+        # 1. Ensure database schema and production build exist
+        if [ ! -f "${APP_DIR}/.next/BUILD_ID" ]; then
+            echo -e "${YELLOW}==> No production build detected. Building application now...${NC}"
+            npx prisma db push
+            npm run build
+        fi
+
+        # 2. Generate service file dynamically with current paths
         cat <<EOF > "$SERVICE_FILE"
 [Unit]
 Description=Curry Puff Counter Web Application Service
@@ -72,7 +90,7 @@ EOF
         chmod 644 "$SERVICE_FILE"
         systemctl daemon-reload
         systemctl enable "$SERVICE_NAME"
-        systemctl start "$SERVICE_NAME"
+        systemctl restart "$SERVICE_NAME"
         
         echo -e "${GREEN}✔ Service installed, enabled, and started on Port 6000!${NC}"
         systemctl status "$SERVICE_NAME" --no-pager
