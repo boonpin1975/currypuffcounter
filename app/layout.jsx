@@ -3,6 +3,8 @@ import { getAuthUser } from '@/lib/auth';
 import Navbar from '@/components/Navbar';
 import BottomNav from '@/components/BottomNav';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata = {
   title: 'Curry Puff Counter - Mobile Vendor Delivery Tracker',
   description: 'Track and analyze curry puff deliveries across vendors on-the-go with real-time analytics.',
