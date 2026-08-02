@@ -21,18 +21,18 @@
 
 - 📱 **Mobile-First UX**:
   - Sticky mobile bottom navigation bar (`Dashboard`, `Vendors`, `Deliveries`).
-  - One-tap **Delivery Counter** positioned at the top on mobile viewports for delivery drivers on-the-go.
+  - One-tap **Delivery Counter** displaying today's date and positioned at the top on mobile viewports for delivery drivers on-the-go.
   - Large touch targets (48px+ button heights) and numeric keypad triggers (`inputMode="numeric"`).
   - Quick-preset increment buttons (`+5`, `+10`, `+25`, `+50`).
 
 - 💰 **Per-Vendor Unit Pricing (RM)**:
   - Configure individual unit prices per vendor location (e.g. *Uncle Ali's Cafe* @ RM 1.50, *Downtown Kiosk* @ RM 1.60, *Night Market Stall #4* @ RM 1.80, *Premium Cafe* @ RM 2.20).
   - Selecting a vendor automatically loads that vendor's set rate and calculates live subtotal revenue (`Quantity × Rate = RM Subtotal`).
-  - Detailed financial analytics on Summary Cards and Recharts 7-Day Bar Charts.
+  - Detailed financial analytics on Summary Cards and Recharts Active Period Bar Charts.
 
 - 📊 **Dashboard & Analytics**:
-  - Summary Cards: **Total Delivered Today**, **Total Active Vendors**, and **Total Delivered This Week**.
-  - Interactive **Recharts 7-Day Bar Chart** breaking down daily puff shipments and RM earnings.
+  - Summary Cards: **Total Delivered Today**, **Total Active Vendors**, and **Active Period Delivery**.
+  - Interactive **Recharts Active Period Bar Chart** breaking down daily puff shipments and RM earnings.
   - Real-time search and filterable delivery logs.
 
 - 🔐 **Authentication & Data Isolation**:
@@ -113,7 +113,7 @@ currypuffcounter/
 │   ├── BottomNav.jsx         # Mobile bottom navigation bar
 │   ├── Navbar.jsx            # Desktop top navigation header
 │   ├── SummaryCards.jsx      # Metrics cards (Count + RM Revenue)
-│   ├── DeliveryChart.jsx     # Recharts 7-day volume chart
+│   ├── DeliveryChart.jsx     # Recharts active period volume chart
 │   ├── QuickCounterForm.jsx  # Mobile-friendly delivery counter
 │   ├── VendorList.jsx        # Vendor management list
 │   └── RecentDeliveriesTable.jsx # Delivery logs history table
