@@ -66,12 +66,12 @@ function LoginForm() {
           <div className="w-16 h-16 rounded-2xl p-1 bg-gradient-to-tr from-amber-600 via-amber-400 to-yellow-300 mx-auto flex items-center justify-center shadow-lg shadow-amber-500/30 mb-3 overflow-hidden">
             <img
               src="/logo.png"
-              alt="Handmade Curry Puff Logo"
+              alt="Nat Kitchen Curry Puff Logo"
               className="w-full h-full object-contain bg-amber-950 rounded-xl"
             />
           </div>
           <h1 className="text-2xl font-black text-amber-400 tracking-tight">
-            Handmade Curry Puff Counter
+            Nat Kitchen Curry Puff
           </h1>
           <p className="text-xs text-gray-400 mt-1">
             Sign in to track your curry puff delivery fleet

@@ -1,6 +1,6 @@
-# 🥐 Curry Puff Counter
+# 🥐 Nat Kitchen Curry Puff
 
-> **Mobile-First Full-Stack Web Application for Tracking Handmade Curry Puff Vendor Shipments & RM Revenue.**
+> **Mobile-First Full-Stack Web Application for Tracking Nat Kitchen Curry Puff Vendor Shipments & RM Revenue.**
 
 [![Next.js](https://img.shields.io/badge/Next.js-14.2-black?logo=next.js)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-18-blue?logo=react)](https://reactjs.org/)
@@ -13,14 +13,10 @@
 
 ## 📸 Overview
 
-**Curry Puff Counter** is an artisanal bakery and delivery fleet management system engineered to track daily curry puff deliveries, calculate vendor-specific Ringgit Malaysia (RM) revenue earnings, and provide real-time volume analytics on mobile devices and desktop workstations.
+**Nat Kitchen Curry Puff** is an artisanal bakery and delivery fleet management system engineered to track daily curry puff deliveries, calculate vendor-specific Ringgit Malaysia (RM) revenue earnings, and provide real-time volume analytics on mobile devices and desktop workstations.
 
 <p align="center">
-  <img src="public/dashboard_preview.png" alt="Curry Puff Counter Dashboard Preview" width="100%" />
-</p>
-
-<p align="center">
-  <img src="public/mobile_counter_preview.png" alt="Mobile Delivery Counter Preview" width="60%" />
+  <img src="public/dashboard_preview.png" alt="Nat Kitchen Curry Puff Dashboard Preview" width="100%" />
 </p>
 
 ---
@@ -192,9 +188,8 @@ currypuffcounter/
 │   ├── seed.js               # Clean database seed configuration
 │   └── clean.js              # Database cleanup script
 ├── public/
-│   ├── logo.png                  # Handmade Curry Puff mascot logo
-│   ├── dashboard_preview.png     # Dashboard & analytics UI screenshot
-│   └── mobile_counter_preview.png # Mobile delivery counter UI screenshot
+│   ├── logo.png                  # Nat Kitchen Curry Puff mascot logo
+│   └── dashboard_preview.png     # Dashboard & analytics UI screenshot
 ├── ecosystem.config.js       # PM2 process manager configuration file
 ├── currypuffcounter.service  # Linux systemd service unit file
 ├── server.js                 # Custom HTTP server on port 6000

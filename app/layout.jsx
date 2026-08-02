@@ -6,7 +6,7 @@ import BottomNav from '@/components/BottomNav';
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
-  title: 'Curry Puff Counter - Mobile Vendor Delivery Tracker',
+  title: 'Nat Kitchen Curry Puff - Mobile Vendor Delivery Tracker',
   description: 'Track and analyze curry puff deliveries across vendors on-the-go with real-time analytics.',
 };
 
@@ -30,7 +30,7 @@ export default async function RootLayout({ children }) {
         </main>
         <BottomNav user={user} />
         <footer className="hidden sm:block py-6 border-t border-amber-950/40 text-center text-xs text-amber-300/50">
-          <p>© 2026 Handmade Curry Puff Counter • Designed Mobile-First for Bakers & Delivery Partners</p>
+          <p>© 2026 Nat Kitchen Curry Puff • Designed Mobile-First for Bakers & Delivery Partners</p>
         </footer>
       </body>
     </html>

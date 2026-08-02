@@ -35,18 +35,18 @@ export default function Navbar({ user }) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           
-          {/* Handmade Curry Puff Logo Branding */}
+          {/* Nat Kitchen Curry Puff Logo Branding */}
           <Link href="/dashboard" className="flex items-center gap-3 group">
             <div className="relative w-11 h-11 rounded-full p-0.5 bg-gradient-to-tr from-amber-600 via-amber-400 to-yellow-300 shadow-md group-hover:scale-105 transition-transform duration-200 overflow-hidden shrink-0">
               <img
                 src="/logo.png"
-                alt="Handmade Curry Puff Logo"
+                alt="Nat Kitchen Curry Puff Logo"
                 className="w-full h-full object-contain bg-amber-950 rounded-full"
               />
             </div>
             <div>
               <span className="font-extrabold text-lg text-amber-400 tracking-tight block leading-none">
-                Handmade Curry Puff
+                Nat Kitchen Curry Puff
               </span>
               <span className="text-[10px] text-amber-200/70 font-semibold tracking-widest uppercase">
                 Vendor Counter (RM)

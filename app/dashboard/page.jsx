@@ -67,14 +67,14 @@ export default function DashboardPage() {
           <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-xl sm:rounded-2xl p-0.5 bg-gradient-to-tr from-amber-600 via-amber-400 to-yellow-300 shadow-xl shadow-amber-500/30 shrink-0 overflow-hidden">
             <img
               src="/logo.png"
-              alt="Handmade Curry Puff Logo"
+              alt="Nat Kitchen Curry Puff Logo"
               className="w-full h-full object-contain bg-amber-950 rounded-xl"
             />
           </div>
           <div>
             <div className="flex items-center gap-1.5 flex-wrap">
               <h1 className="text-lg sm:text-2xl font-black text-amber-400 tracking-tight">
-                Curry Puff Counter
+                Nat Kitchen Curry Puff
               </h1>
               <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-950/80 text-emerald-300 border border-emerald-500/40 flex items-center gap-0.5">
                 <DollarSign className="w-3 h-3" /> RM Tracker
