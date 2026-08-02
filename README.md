@@ -15,6 +15,14 @@
 
 **Curry Puff Counter** is an artisanal bakery and delivery fleet management system engineered to track daily curry puff deliveries, calculate vendor-specific Ringgit Malaysia (RM) revenue earnings, and provide real-time volume analytics on mobile devices and desktop workstations.
 
+<p align="center">
+  <img src="public/dashboard_preview.png" alt="Curry Puff Counter Dashboard Preview" width="100%" />
+</p>
+
+<p align="center">
+  <img src="public/mobile_counter_preview.png" alt="Mobile Delivery Counter Preview" width="60%" />
+</p>
+
 ---
 
 ## ✨ Key Features
@@ -124,7 +132,9 @@ currypuffcounter/
 │   ├── seed.js               # Clean database seed configuration
 │   └── clean.js              # Database cleanup script
 ├── public/
-│   └── logo.png              # Handmade Curry Puff mascot logo
+│   ├── logo.png                  # Handmade Curry Puff mascot logo
+│   ├── dashboard_preview.png     # Dashboard & analytics UI screenshot
+│   └── mobile_counter_preview.png # Mobile delivery counter UI screenshot
 ├── currypuffcounter.service  # Linux systemd service unit file
 ├── server.js                 # Custom HTTP server on port 6000
 ├── package.json              # Project configuration & npm scripts
