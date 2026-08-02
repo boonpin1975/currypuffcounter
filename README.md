@@ -121,6 +121,45 @@ sudo journalctl -u currypuffcounter -f
 
 ---
 
+## ⚡ PM2 Process Manager Deployment
+
+### 1. Install PM2 Globally
+```bash
+npm install -g pm2
+```
+
+### 2. Configure `ecosystem.config.js`
+The repository includes a pre-configured `ecosystem.config.js` optimized for low-memory environments (`t2.micro` 1 GB RAM):
+
+```javascript
+module.exports = {
+  apps: [{
+    name: 'currypuffcounter',
+    script: 'server.js',
+    max_memory_restart: '450M',
+    env: {
+      NODE_ENV: 'production',
+      PORT: 6000,
+      NODE_OPTIONS: '--max-old-space-size=400',
+    },
+  }],
+};
+```
+
+### 3. Start & Persist PM2 Process
+```bash
+# Start application with PM2
+pm2 start ecosystem.config.js
+
+# Save process list across system reboots
+pm2 save
+
+# Generate and configure PM2 startup script
+pm2 startup
+```
+
+---
+
 ## 📁 Repository File Structure
 
 ```
@@ -156,6 +195,7 @@ currypuffcounter/
 │   ├── logo.png                  # Handmade Curry Puff mascot logo
 │   ├── dashboard_preview.png     # Dashboard & analytics UI screenshot
 │   └── mobile_counter_preview.png # Mobile delivery counter UI screenshot
+├── ecosystem.config.js       # PM2 process manager configuration file
 ├── currypuffcounter.service  # Linux systemd service unit file
 ├── server.js                 # Custom HTTP server on port 6000
 ├── package.json              # Project configuration & npm scripts
