@@ -32,11 +32,11 @@
 - 💰 **Per-Vendor Unit Pricing (RM)**:
   - Configure individual unit prices per vendor location (e.g. *Uncle Ali's Cafe* @ RM 1.50, *Downtown Kiosk* @ RM 1.60, *Night Market Stall #4* @ RM 1.80, *Premium Cafe* @ RM 2.20).
   - Selecting a vendor automatically loads that vendor's set rate and calculates live subtotal revenue (`Quantity × Rate = RM Subtotal`).
-  - Detailed financial analytics on Summary Cards and Recharts Active Period Bar Charts.
+  - Detailed financial analytics on Summary Cards and Recharts Daily Bar Charts.
 
 - 📊 **Dashboard & Analytics**:
-  - Summary Cards: **Total Delivered Today**, **Total Active Vendors**, and **Active Period Delivery**.
-  - Interactive **Recharts Active Period Bar Chart** breaking down daily puff shipments and RM earnings.
+  - Summary Cards: **Total Delivered Today**, **Total Active Vendors**, and **Daily Delivery Volume**.
+  - Interactive **Recharts Daily Delivery Bar Chart** breaking down daily puff shipments and RM earnings.
   - Real-time search and filterable delivery logs.
 
 - 🔐 **Authentication & Data Isolation**:

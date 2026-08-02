@@ -29,7 +29,7 @@ export default function SummaryCards({ stats, loading }) {
       badgeBg: 'bg-orange-500/20 text-orange-300 border-orange-500/30',
     },
     {
-      title: 'Active Period Delivery',
+      title: 'Daily Delivery Volume',
       value: stats?.totalDeliveredActive ?? stats?.totalDeliveredThisWeek ?? 0,
       unit: 'puffs',
       subValue: `RM ${(stats?.totalRevenueActiveRM ?? stats?.totalRevenueThisWeekRM ?? 0).toFixed(2)}`,
@@ -37,7 +37,7 @@ export default function SummaryCards({ stats, loading }) {
       gradient: 'from-yellow-500/20 via-yellow-600/10 to-transparent',
       borderColor: 'border-yellow-500/30',
       textColor: 'text-yellow-400',
-      badge: 'Active Period',
+      badge: 'Daily',
       badgeBg: 'bg-yellow-500/20 text-yellow-300 border-yellow-500/30',
     },
   ];
