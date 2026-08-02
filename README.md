@@ -15,10 +15,6 @@
 
 **Nat Kitchen Curry Puff** is an artisanal bakery and delivery fleet management system engineered to track daily curry puff deliveries, calculate vendor-specific Ringgit Malaysia (RM) revenue earnings, and provide real-time volume analytics on mobile devices and desktop workstations.
 
-<p align="center">
-  <img src="public/dashboard_preview.png" alt="Nat Kitchen Curry Puff Dashboard Preview" width="100%" />
-</p>
-
 ---
 
 ## ✨ Key Features
@@ -45,6 +41,38 @@
 
 - ⚡ **Production Server Configured**:
   - Custom HTTP server (`server.js`) listening on **Port 6000**.
+
+---
+
+## 🖼️ Function Pages & Screenshots
+
+### 1. 📊 Dashboard & Delivery Counter (`/dashboard`)
+Mobile-first dashboard displaying daily metrics (total puffs delivered, vendor count, RM revenue), interactive Recharts daily volume chart, and quick-increment counter form.
+
+<p align="center">
+  <img src="public/dashboard_preview.png" alt="Dashboard Page Preview" width="100%" />
+</p>
+
+### 2. 🏪 Vendor Management Page (`/vendors`)
+Manage vendor partner locations, configure custom unit rates (RM) per vendor, and view active partner statistics.
+
+<p align="center">
+  <img src="public/vendors_page_preview.png" alt="Vendors Page Preview" width="100%" />
+</p>
+
+### 3. 📜 Delivery Logs & History Page (`/deliveries`)
+Comprehensive delivery logging history with search, vendor filtering, and real-time revenue subtotal calculations.
+
+<p align="center">
+  <img src="public/deliveries_page_preview.png" alt="Deliveries Logs Preview" width="100%" />
+</p>
+
+### 4. 🔐 Sign In & Registration Pages (`/login`, `/register`)
+Secure authentication suite with bcrypt password hashing and HttpOnly JWT cookie sessions.
+
+<p align="center">
+  <img src="public/auth_login_preview.png" alt="Sign In Page Preview" width="100%" />
+</p>
 
 ---
 
@@ -189,7 +217,10 @@ currypuffcounter/
 │   └── clean.js              # Database cleanup script
 ├── public/
 │   ├── logo.png                  # Nat Kitchen Curry Puff mascot logo
-│   └── dashboard_preview.png     # Dashboard & analytics UI screenshot
+│   ├── dashboard_preview.png     # Dashboard & analytics UI screenshot
+│   ├── vendors_page_preview.png   # Vendor management UI screenshot
+│   ├── deliveries_page_preview.png # Delivery logs history UI screenshot
+│   └── auth_login_preview.png    # User sign-in interface screenshot
 ├── ecosystem.config.js       # PM2 process manager configuration file
 ├── currypuffcounter.service  # Linux systemd service unit file
 ├── server.js                 # Custom HTTP server on port 6000
