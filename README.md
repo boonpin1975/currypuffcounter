@@ -54,6 +54,27 @@
 
 ## 🛠️ Systemd Linux Service Setup (`systemctl`)
 
+### 0. Prepare for Low-Memory Deployment
+Running on a `t2.micro` (1 GB RAM) means every MB counts.
+
+#### 🧮 Add Swap Space
+Create swap memory on your EC2 instance:
+
+```bash
+sudo fallocate -l 1G /swapfile
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
+```
+
+Then make it persistent:
+
+```bash
+echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+```
+
+---
+
 ### 1. Automatic One-Line Systemd Installer
 Run the included installer script with `sudo` to automatically configure, enable, and start the systemd service on Linux:
 
